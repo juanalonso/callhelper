@@ -1,2 +1,2 @@
-# callhelper
-Word list generation to practice calligraphy
+# Calligraphy helper
+### Word list generation to practice calligraphy
