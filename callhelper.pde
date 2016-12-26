@@ -2,10 +2,9 @@ import java.util.TreeMap;
 import java.util.Map;
 import java.util.Collections;
 
-final String letrasQueNoSeEscribir = "x";
+final String letrasQueNoSeEscribir = "";
 final String letrasQueQuieroPracticar = "";
-final int longitudPalabra = 0;
-final boolean incluirConjugaciones = false;
+final int longitudPalabra = 7;
 
 int totalPalabras = 0;
 ArrayList<String> listaPalabras;
@@ -24,17 +23,13 @@ void setup() {
 
   listaPalabras = new ArrayList();
   punterosAlfabeto = new TreeMap();
-
-  leePalabras("lemario-general-del-espanol.txt");
-  if (incluirConjugaciones) {
-    leePalabras("verbos-espanol-conjugaciones.txt");
-  }
+  String palabrasLemario[] = loadStrings("lemario-general-del-espanol.txt");
+  
+  filtraPalabras(palabrasLemario);
   Collections.sort(listaPalabras);
-
-  println(listaPalabras.size() + " palabras");
-
   saveStrings("lista_palabras.txt", formateaSalida());
 
+  println(listaPalabras.size() + " palabras válidas");
   println(millis()-time + " ms");
   println(punterosAlfabeto);
 
@@ -59,12 +54,11 @@ void setup() {
 
 
 
-void leePalabras(String sFichero) {
+void filtraPalabras(String palabrasLemario[]) {
 
-  String sPalabras[] = loadStrings(sFichero);
   String ultimaInicial = "";
 
-  for (String palabra : sPalabras) {
+  for (String palabra : palabrasLemario) {
 
     palabra = palabra.toLowerCase();
 
@@ -74,12 +68,12 @@ void leePalabras(String sFichero) {
     }
 
     //If the word is a preffix (xxx-) or a suffix (-xxx) (or an expression, such as 'tabula rasa') we skip the word
-    if (match(palabra, "-| |‒")!=null) {
+    if (match(palabra, "-|‒| ")!=null) {
       continue;
     }
 
     //If the word contains a letter we don't know how to write, we skip the word    
-    if (match(palabra, "[" +letrasQueNoSeEscribir + "]+")!=null) {
+    if (letrasQueNoSeEscribir.length()>0 && match(palabra, "[" +letrasQueNoSeEscribir + "]+")!=null) {
       continue;
     }
 
