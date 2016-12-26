@@ -2,9 +2,9 @@ import java.util.TreeMap;
 import java.util.Map;
 import java.util.Collections;
 
-final String letrasQueNoSeEscribir = "qweéyoópsdfgjkñzxcvb";
+final String letrasQueNoSeEscribir = "x";
 final String letrasQueQuieroPracticar = "";
-final int longitudPalabra = 10;
+final int longitudPalabra = 0;
 final boolean incluirConjugaciones = false;
 
 int totalPalabras = 0;
@@ -13,6 +13,12 @@ String[] alfabeto;
 TreeMap<String, Integer> punterosAlfabeto;
 
 void setup() {
+
+  size(800, 800);
+  pixelDensity(2);
+  background(255);
+  fill(0);
+  textSize(36);
 
   long time = millis();
 
@@ -35,15 +41,19 @@ void setup() {
   int puntero = 0;
   int posicion = 0;
   alfabeto = new String[punterosAlfabeto.size()];
+  String outputText = "";
   for (Map.Entry palabrasQueEmpiezanCon : punterosAlfabeto.entrySet()) {
 
     int palabraAlAzar = puntero + (int)random(0, (Integer)palabrasQueEmpiezanCon.getValue());
-
-    alfabeto[posicion] = listaPalabras.get(palabraAlAzar);
+    String palabra = listaPalabras.get(palabraAlAzar);
+    alfabeto[posicion] = palabra;
+    outputText += palabra + " · ";
     puntero += (Integer)palabrasQueEmpiezanCon.getValue();
     posicion++;
   }
   saveStrings("lista_alfabeto.txt", alfabeto);
+
+  text(outputText, 20, 20, width - 40, height-40);
 
 }
 
