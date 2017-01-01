@@ -1,10 +1,13 @@
-//Uses Guido, by Florian Jenett
-//Sketch > Import library > Add library > Guido
+//CREDITS:
 
+//Uses Guido, by Florian Jenett   Sketch > Import library > Add library > Guido
 //UI colors from https://flatuicolors.com/
-
+//Lemario from https://github.com/olea/lemarios
 
 import de.bezier.guido.*;
+
+final int TEXTSIZE_BIG = 32;
+final int TEXTSIZE_SMALL = 14;
 
 String[] palabrasLemario;
 String[] filteredWords;
@@ -13,7 +16,7 @@ Alphabet a;
 
 SimpleButton sbGenerate, sbIncWL, sbDecWL;
 
-int wordLength = 6;
+int wordLength = 7;
 
 void setup() {
 
@@ -22,8 +25,9 @@ void setup() {
   background(#ecf0f1);
   fill(0);
   //So the first time there is no delay when writing the words
-  textSize(32);
-  textSize(14);
+  textSize(TEXTSIZE_BIG);
+  textSize(TEXTSIZE_SMALL);
+  textAlign(CENTER);
 
   palabrasLemario = loadStrings("lemario-general-del-espanol.txt");
   palabrasLemario = sort(palabrasLemario);
@@ -34,7 +38,7 @@ void setup() {
 
   Interactive.make(this);
   sbDecWL = new SimpleButton (20, 20, 40, 40, "dec");
-  sbIncWL = new SimpleButton (180, 20, 40, 40, "inc");
+  sbIncWL = new SimpleButton (140, 20, 40, 40, "inc");
   sbGenerate = new SimpleButton(20, 80, width-40, 40, "gen");
 }
 
@@ -142,11 +146,12 @@ void updateWords() {
   background(#ecf0f1);
   fill(255);
   rect(20, 140, width - 40, height-200);
-  fill(0);
-  textSize(32);
+  fill(#2c3e50);
+  textSize(TEXTSIZE_BIG);
+  text("" + wordLength, 60, 20, 80, 40);
   text(outputText, 35, 150, width - 70, height-160);
-  textSize(14);
-  text(filteredWords.length + " palabras encontradas", 25, height-40, width - 40, height);
+  textSize(TEXTSIZE_SMALL);
+  text(filteredWords.length + " palabra" + (filteredWords.length!=1?"s":""), 25, height-40, width - 40, height);
 }
 
 class SimpleButton extends ActiveElement {
@@ -173,7 +178,6 @@ class SimpleButton extends ActiveElement {
         wordLength--;
         updateWords();
       }
-
     }
   }
 
@@ -183,6 +187,8 @@ class SimpleButton extends ActiveElement {
 
   void draw () {
 
+    noStroke();
+
     if (!hover && !on) {
       fill(#f1c40f);
     } else if (hover && !on) {
@@ -191,8 +197,17 @@ class SimpleButton extends ActiveElement {
       fill(#d35400);
     }
 
-    noStroke();
-
     rect(x, y, width, height);
+
+    fill(#2c3e50);
+    textSize(TEXTSIZE_BIG);
+
+    if (ID == "gen") {
+      text("Actualizar lista", x, y, width, height);
+    } else if (ID == "inc") {
+      text("+", x, y, width, height);
+    } else if (ID == "dec") {
+      text("-", x, y, width, height);
+    }
   }
 }
