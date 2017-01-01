@@ -1,9 +1,15 @@
+//Uses Guido, by Florian Jenett
+//Sketch > Import library > Add library > Guido
+import de.bezier.guido.*;
+
 final int longitudPalabra = 10;
 
 String[] palabrasLemario;
 String[] filteredWords;
 
 Alphabet a;
+
+SimpleButton sbGenerate;
 
 void setup() {
 
@@ -21,6 +27,9 @@ void setup() {
   a = new Alphabet();
   a.setCanWrite("inmulhtraocebdpqfj");
   a.setShouldPractice("fj");
+  
+  Interactive.make( this );
+  sbGenerate = new SimpleButton(20, 20, 20, 20);
 }
 
 
