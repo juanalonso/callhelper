@@ -1,24 +1,28 @@
 //Uses Guido, by Florian Jenett
 //Sketch > Import library > Add library > Guido
-import de.bezier.guido.*;
 
-final int longitudPalabra = 10;
+//UI colors from https://flatuicolors.com/
+
+
+import de.bezier.guido.*;
 
 String[] palabrasLemario;
 String[] filteredWords;
 
 Alphabet a;
 
-SimpleButton sbGenerate;
+SimpleButton sbGenerate, sbIncWL, sbDecWL;
+
+int wordLength = 6;
 
 void setup() {
 
   size(600, 800);
   pixelDensity(2);
-  background(255);
+  background(#ecf0f1);
   fill(0);
   //So the first time there is no delay when writing the words
-  textSize(36);
+  textSize(32);
   textSize(14);
 
   palabrasLemario = loadStrings("lemario-general-del-espanol.txt");
@@ -27,9 +31,11 @@ void setup() {
   a = new Alphabet();
   a.setCanWrite("inmulhtraocebdpqfj");
   a.setShouldPractice("fj");
-  
-  Interactive.make( this );
-  sbGenerate = new SimpleButton(20, 20, 20, 20);
+
+  Interactive.make(this);
+  sbDecWL = new SimpleButton (20, 20, 40, 40, "dec");
+  sbIncWL = new SimpleButton (180, 20, 40, 40, "inc");
+  sbGenerate = new SimpleButton(20, 80, width-40, 40, "gen");
 }
 
 
@@ -51,7 +57,7 @@ String[] filtraPalabras(String palabrasLemario[]) {
     word = word.toLowerCase();
 
     //If the length doesn't match, we skip the word
-    if (longitudPalabra>0 && word.length() != longitudPalabra) {
+    if (wordLength>0 && word.length() != wordLength) {
       continue;
     }
 
@@ -103,7 +109,7 @@ String[] formateaSalida(String[] palabras) {
 
 
 
-void mousePressed() {
+void updateWords() {
 
   filteredWords = filtraPalabras(palabrasLemario);
   saveStrings("lista_palabras.txt", formateaSalida(filteredWords));
@@ -133,9 +139,60 @@ void mousePressed() {
     outputText += filteredWords[offset + (int)random(0, wordCounter)];
   }
 
-  background(255);
-  textSize(36);
-  text(outputText, 20, 20, width - 40, height-40);
+  background(#ecf0f1);
+  fill(255);
+  rect(20, 140, width - 40, height-200);
+  fill(0);
+  textSize(32);
+  text(outputText, 35, 150, width - 70, height-160);
   textSize(14);
-  text(filteredWords.length + " palabras encontradas", 20, height-40, width - 40, height);
+  text(filteredWords.length + " palabras encontradas", 25, height-40, width - 40, height);
+}
+
+class SimpleButton extends ActiveElement {
+
+  boolean on;
+  String ID = "";
+
+  SimpleButton (float x, float y, float w, float h, String _ID) {
+    super(x, y, w, h);
+    ID = _ID;
+  }
+
+  void mousePressed () {
+    on = true;
+    if (ID == "gen") {
+      updateWords();
+    } else if (ID == "inc") {
+      if (wordLength<20) {
+        wordLength++;
+        updateWords();
+      }
+    } else if (ID == "dec") {
+      if (wordLength>0) {
+        wordLength--;
+        updateWords();
+      }
+
+    }
+  }
+
+  void mouseReleased () {
+    on = false;
+  }
+
+  void draw () {
+
+    if (!hover && !on) {
+      fill(#f1c40f);
+    } else if (hover && !on) {
+      fill(#f39c12);
+    } else if (on) {
+      fill(#d35400);
+    }
+
+    noStroke();
+
+    rect(x, y, width, height);
+  }
 }
