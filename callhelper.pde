@@ -1,11 +1,9 @@
-final String letrasQueNoSeEscribir = "qweéryoópsdfgjkñzxcvb";
-final String letrasQueQuieroPracticar = "mniuhlta";
-final int longitudPalabra = 0;
+final int longitudPalabra = 10;
 
 String[] palabrasLemario;
 String[] filteredWords;
 
-
+Alphabet a;
 
 void setup() {
 
@@ -13,9 +11,16 @@ void setup() {
   pixelDensity(2);
   background(255);
   fill(0);
+  //So the first time there is no delay when writing the words
+  textSize(36);
+  textSize(14);
 
   palabrasLemario = loadStrings("lemario-general-del-espanol.txt");
   palabrasLemario = sort(palabrasLemario);
+
+  a = new Alphabet();
+  a.setCanWrite("inmulhtraocebdpqfj");
+  a.setShouldPractice("fj");
 }
 
 
@@ -28,6 +33,9 @@ void draw() {
 String[] filtraPalabras(String palabrasLemario[]) {
 
   ArrayList<String> listaPalabras = new ArrayList();
+
+  String lettersCanWrite = a.getCanWrite();
+  String lettersToPractice = a.getShouldPractice();
 
   for (String word : palabrasLemario) {
 
@@ -44,12 +52,12 @@ String[] filtraPalabras(String palabrasLemario[]) {
     }
 
     //If the word contains a letter we don't know how to write, we skip the word    
-    if (letrasQueNoSeEscribir.length()>0 && match(word, "[" +letrasQueNoSeEscribir + "]+")!=null) {
+    if (match(word, "^[" +lettersCanWrite + "]+$")==null) {
       continue;
     }
 
     //If the word doesn't contain at least one of the letter we want to practice, we skip the word
-    if (letrasQueQuieroPracticar.length()>0 && match(word, "[" + letrasQueQuieroPracticar + "]+")==null) {
+    if (lettersToPractice.length()>0 && match(word, "[" + lettersToPractice + "]+")==null) {
       continue;
     }
 
@@ -112,12 +120,13 @@ void mousePressed() {
     wordCounter++;
   }
 
-  outputText += filteredWords[offset + (int)random(0, wordCounter)];
+  if (filteredWords.length>0) {
+    outputText += filteredWords[offset + (int)random(0, wordCounter)];
+  }
 
   background(255);
   textSize(36);
   text(outputText, 20, 20, width - 40, height-40);
   textSize(14);
   text(filteredWords.length + " palabras encontradas", 20, height-40, width - 40, height);
-
 }
