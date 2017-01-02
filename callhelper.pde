@@ -7,6 +7,7 @@
 import de.bezier.guido.*;
 
 final int TEXTSIZE_BIG = 32;
+final int TEXTSIZE_MEDIUM = 24;
 final int TEXTSIZE_SMALL = 14;
 
 String[] palabrasLemario;
@@ -24,8 +25,10 @@ void setup() {
   pixelDensity(2);
   background(#ecf0f1);
   fill(0);
+  noStroke();
   //So the first time there is no delay when writing the words
   textSize(TEXTSIZE_BIG);
+  textSize(TEXTSIZE_MEDIUM);
   textSize(TEXTSIZE_SMALL);
   textAlign(CENTER);
 
@@ -33,13 +36,19 @@ void setup() {
   palabrasLemario = sort(palabrasLemario);
 
   a = new Alphabet();
-  a.setCanWrite("inmulhtraocebdpqfj");
-  a.setShouldPractice("fj");
+  a.setCanWrite("inñmulhtraocebdpqfjk");
+  a.setShouldPractice("k");
 
   Interactive.make(this);
-  sbDecWL = new SimpleButton (20, 20, 40, 40, "dec");
-  sbIncWL = new SimpleButton (140, 20, 40, 40, "inc");
-  sbGenerate = new SimpleButton(20, 80, width-40, 40, "gen");
+  sbDecWL = new SimpleButton (20, 60, 40, 40, "dec");
+  sbIncWL = new SimpleButton (120, 60, 40, 40, "inc");
+  sbGenerate = new SimpleButton(220, 60, width-240, 40, "gen");
+  
+  for (int f=0; f<27; f++) {
+    new SimpleButton (20 + f*21, 20, 15, 20, "a");
+  }
+
+  updateWords();
 }
 
 
@@ -145,11 +154,11 @@ void updateWords() {
 
   background(#ecf0f1);
   fill(255);
-  rect(20, 140, width - 40, height-200);
+  rect(20, 180, width - 40, height-240);
   fill(#2c3e50);
   textSize(TEXTSIZE_BIG);
-  text("" + wordLength, 60, 20, 80, 40);
-  text(outputText, 35, 150, width - 70, height-160);
+  text("" + wordLength, 60, 60, 60, 40);
+  text(outputText, 35, 190, width - 70, height-200);
   textSize(TEXTSIZE_SMALL);
   text(filteredWords.length + " palabra" + (filteredWords.length!=1?"s":""), 25, height-40, width - 40, height);
 }
@@ -200,13 +209,15 @@ class SimpleButton extends ActiveElement {
     rect(x, y, width, height);
 
     fill(#2c3e50);
-    textSize(TEXTSIZE_BIG);
 
     if (ID == "gen") {
-      text("Actualizar lista", x, y, width, height);
+      textSize(TEXTSIZE_MEDIUM);
+      text("Actualizar lista", x, y+6, width, height);
     } else if (ID == "inc") {
+      textSize(TEXTSIZE_BIG);
       text("+", x, y, width, height);
     } else if (ID == "dec") {
+      textSize(TEXTSIZE_BIG);
       text("-", x, y, width, height);
     }
   }
