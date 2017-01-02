@@ -3,20 +3,21 @@ class Alphabet {
   HashMap<String, Letter> alphabet;
   private String canWriteExpanded;
   private String shouldPracticeExpanded;
+  private String fullAlphabet;
 
-  Alphabet (String fullCharacterList) {
+  Alphabet (String _fullAlphabet) {
 
     canWriteExpanded = "";
     shouldPracticeExpanded = "";
+    fullAlphabet = _fullAlphabet;
 
     alphabet = new HashMap<String, Letter>();
-    
-    for (int f=0; f<fullCharacterList.length(); f++) {
-      alphabet.put(fullCharacterList.substring(f, f+1), new Letter(fullCharacterList.charAt(f)));
-    }
 
+    for (int f=0; f<fullAlphabet.length(); f++) {
+      alphabet.put(fullAlphabet.substring(f, f+1), new Letter(fullAlphabet.charAt(f)));
+    }
   }
-  
+
   void setAlternates(String key, String alternates) {
     alphabet.get(key).setAlternates(alternates);
   }
@@ -37,6 +38,21 @@ class Alphabet {
     return canWriteExpanded;
   }
 
+  boolean getCanWriteLetter(String l) {
+    return alphabet.get(l).canWrite();
+  }
+
+  void setCanWriteLetter(String l, boolean w) {
+    alphabet.get(l).setWrite(w);
+    canWriteExpanded = "";
+    for (String key : alphabet.keySet()) {
+      Letter lt = alphabet.get(key);
+      if (lt.canWrite()) {
+        canWriteExpanded += key + lt.getAlternates();
+      }
+    }
+  }
+
   void setShouldPractice(String s) {
     for (String key : alphabet.keySet()) {
       alphabet.get(key).setPractice(false);
@@ -51,6 +67,10 @@ class Alphabet {
 
   String getShouldPractice() {
     return shouldPracticeExpanded;
+  }
+
+  String getFullAlphabet() {
+    return fullAlphabet;
   }
 
   void debug() {

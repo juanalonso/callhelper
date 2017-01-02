@@ -45,12 +45,13 @@ void setup() {
   a.setShouldPractice("k");
 
   Interactive.make(this);
-  sbDecWL = new SimpleButton (20, 60, 40, 40, "dec");
-  sbIncWL = new SimpleButton (120, 60, 40, 40, "inc");
-  sbGenerate = new SimpleButton(220, 60, width-240, 40, "gen");
-  
-  for (int f=0; f<27; f++) {
-    new SimpleButton (20 + f*21, 20, 15, 20, "a");
+  sbDecWL = new SimpleButton (20, 60, 40, 40, "dec", true);
+  sbIncWL = new SimpleButton (120, 60, 40, 40, "inc", true);
+  sbGenerate = new SimpleButton(220, 60, width-240, 40, "gen", true);
+
+  String fullAlphabet = a.getFullAlphabet();
+  for (int f=0; f<fullAlphabet.length(); f++) {
+    new SimpleButton (20 + f*21, 20, 15, 20, fullAlphabet.substring(f, f+1), a.getCanWriteLetter(fullAlphabet.substring(f, f+1)));
   }
 
   updateWords();
@@ -170,12 +171,13 @@ void updateWords() {
 
 class SimpleButton extends ActiveElement {
 
-  boolean on;
+  boolean on, active;
   String ID = "";
 
-  SimpleButton (float x, float y, float w, float h, String _ID) {
+  SimpleButton (float x, float y, float w, float h, String _ID, boolean _active) {
     super(x, y, w, h);
     ID = _ID;
+    active = _active;
   }
 
   void mousePressed () {
@@ -192,6 +194,10 @@ class SimpleButton extends ActiveElement {
         wordLength--;
         updateWords();
       }
+    } else {
+      active=!active;
+      a.setCanWriteLetter(ID, active);
+      updateWords();
     }
   }
 
@@ -204,7 +210,11 @@ class SimpleButton extends ActiveElement {
     noStroke();
 
     if (!hover && !on) {
-      fill(#f1c40f);
+      if (active) {
+        fill(#f1c40f);
+      } else {
+        fill(#bdc3c7);
+      }
     } else if (hover && !on) {
       fill(#f39c12);
     } else if (on) {
@@ -224,6 +234,12 @@ class SimpleButton extends ActiveElement {
     } else if (ID == "dec") {
       textSize(TEXTSIZE_BIG);
       text("-", x, y, width, height);
+    } else {
+      textSize(TEXTSIZE_SMALL);
+      if (!active) {
+        fill(#ecf0f1);
+      }
+      text(ID, x, y, width, height);
     }
   }
 }
