@@ -35,7 +35,12 @@ void setup() {
   palabrasLemario = loadStrings("lemario-general-del-espanol.txt");
   palabrasLemario = sort(palabrasLemario);
 
-  a = new Alphabet();
+  a = new Alphabet("abcdefghijklmnñopqrstuvwxyz");
+  a.setAlternates("a", "á");
+  a.setAlternates("e", "é");
+  a.setAlternates("i", "í");
+  a.setAlternates("o", "ó");
+  a.setAlternates("u", "úü");
   a.setCanWrite("inñmulhtraocebdpqfjk");
   a.setShouldPractice("k");
 

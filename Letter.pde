@@ -5,15 +5,11 @@ class Letter {
   private boolean canWrite;
   private boolean shouldPractice;
 
-  Letter (char c, String a) {
+  Letter (char c) {
     letter = c;
-    alternates = a;
+    alternates = "";
     canWrite = false;
     shouldPractice = false;
-  }
-
-  Letter (char c) {
-    this(c, "");
   }
 
   void setWrite(boolean _canWrite) {
@@ -30,6 +26,10 @@ class Letter {
 
   boolean shouldPractice() {
     return shouldPractice;
+  }
+  
+  void setAlternates(String s){
+    alternates = s;
   }
   
   String getAlternates () {

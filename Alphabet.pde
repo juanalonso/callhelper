@@ -4,39 +4,21 @@ class Alphabet {
   private String canWriteExpanded;
   private String shouldPracticeExpanded;
 
-  Alphabet () {
+  Alphabet (String fullCharacterList) {
 
     canWriteExpanded = "";
     shouldPracticeExpanded = "";
 
     alphabet = new HashMap<String, Letter>();
-    alphabet.put("a", new Letter('a', "á"));
-    alphabet.put("b", new Letter('b'));
-    alphabet.put("c", new Letter('c'));
-    alphabet.put("d", new Letter('d'));
-    alphabet.put("e", new Letter('e', "é"));
-    alphabet.put("f", new Letter('f'));
-    alphabet.put("g", new Letter('g'));
-    alphabet.put("h", new Letter('h'));
-    alphabet.put("i", new Letter('i', "í"));
-    alphabet.put("j", new Letter('j'));
-    alphabet.put("k", new Letter('k'));
-    alphabet.put("l", new Letter('l'));
-    alphabet.put("m", new Letter('m'));
-    alphabet.put("n", new Letter('n'));
-    alphabet.put("ñ", new Letter('ñ'));
-    alphabet.put("o", new Letter('o', "ó"));
-    alphabet.put("p", new Letter('p'));
-    alphabet.put("q", new Letter('q'));
-    alphabet.put("r", new Letter('r'));
-    alphabet.put("s", new Letter('s'));
-    alphabet.put("t", new Letter('t'));
-    alphabet.put("u", new Letter('u', "úü"));
-    alphabet.put("v", new Letter('v'));
-    alphabet.put("w", new Letter('w'));
-    alphabet.put("x", new Letter('x'));
-    alphabet.put("y", new Letter('y'));
-    alphabet.put("z", new Letter('z'));
+    
+    for (int f=0; f<fullCharacterList.length(); f++) {
+      alphabet.put(fullCharacterList.substring(f, f+1), new Letter(fullCharacterList.charAt(f)));
+    }
+
+  }
+  
+  void setAlternates(String key, String alternates) {
+    alphabet.get(key).setAlternates(alternates);
   }
 
   void setCanWrite(String s) {
