@@ -38,10 +38,6 @@ class Alphabet {
     return canWriteExpanded;
   }
 
-  boolean getCanWriteLetter(String l) {
-    return alphabet.get(l).canWrite();
-  }
-
   void setCanWriteLetter(String l, boolean w) {
     alphabet.get(l).setWrite(w);
     canWriteExpanded = "";
@@ -51,6 +47,10 @@ class Alphabet {
         canWriteExpanded += key + lt.getAlternates();
       }
     }
+  }
+
+  boolean getCanWriteLetter(String l) {
+    return alphabet.get(l).canWrite();
   }
 
   void setShouldPractice(String s) {
@@ -68,6 +68,21 @@ class Alphabet {
   String getShouldPractice() {
     return shouldPracticeExpanded;
   }
+  
+  void setShouldPracticeLetter(String l, boolean w) {
+    alphabet.get(l).setPractice(w);
+    shouldPracticeExpanded = "";
+    for (String key : alphabet.keySet()) {
+      Letter lt = alphabet.get(key);
+      if (lt.shouldPractice()) {
+        shouldPracticeExpanded += key + lt.getAlternates();
+      }
+    }
+  }
+    
+  boolean getShouldPracticeLetter(String l) {
+    return alphabet.get(l).shouldPractice();
+  }  
 
   String getFullAlphabet() {
     return fullAlphabet;

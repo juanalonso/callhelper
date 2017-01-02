@@ -6,16 +6,14 @@
 
 import de.bezier.guido.*;
 
-final int TEXTSIZE_BIG = 32;
-final int TEXTSIZE_MEDIUM = 24;
+final int TEXTSIZE_BIG = 27;
+final int TEXTSIZE_MEDIUM = 22;
 final int TEXTSIZE_SMALL = 14;
 
 String[] palabrasLemario;
 String[] filteredWords;
 
 Alphabet a;
-
-SimpleButton sbGenerate, sbIncWL, sbDecWL;
 
 int wordLength = 7;
 
@@ -41,17 +39,18 @@ void setup() {
   a.setAlternates("i", "í");
   a.setAlternates("o", "ó");
   a.setAlternates("u", "úü");
-  a.setCanWrite("inñmulhtraocebdpqfjk");
-  a.setShouldPractice("k");
+  a.setCanWrite("inñmulhtraocebdpqfjksg");
+  a.setShouldPractice("g");
 
   Interactive.make(this);
-  sbDecWL = new SimpleButton (20, 60, 40, 40, "dec", true);
-  sbIncWL = new SimpleButton (120, 60, 40, 40, "inc", true);
-  sbGenerate = new SimpleButton(220, 60, width-240, 40, "gen", true);
+  new SimpleButton( 20, 90, 40, 40, "-", true, 1);
+  new SimpleButton(120, 90, 40, 40, "+", true, 1);
+  new SimpleButton(220, 90, width-240, 40, "Actualizar lista", true, 2);
 
   String fullAlphabet = a.getFullAlphabet();
   for (int f=0; f<fullAlphabet.length(); f++) {
-    new SimpleButton (20 + f*21, 20, 15, 20, fullAlphabet.substring(f, f+1), a.getCanWriteLetter(fullAlphabet.substring(f, f+1)));
+    new SimpleButton (20 + f*21, 20, 15, 20, fullAlphabet.substring(f, f+1), a.getCanWriteLetter(fullAlphabet.substring(f, f+1)), 3);
+    new SimpleButton (20 + f*21, 50, 15, 20, fullAlphabet.substring(f, f+1), a.getShouldPracticeLetter(fullAlphabet.substring(f, f+1)), 4);
   }
 
   updateWords();
@@ -160,11 +159,12 @@ void updateWords() {
 
   background(#ecf0f1);
   fill(255);
-  rect(20, 180, width - 40, height-240);
+  rect(20, 150, width - 40, height-210);
   fill(#2c3e50);
+  textSize(TEXTSIZE_MEDIUM);
+  text("" + wordLength, 62, 96, 60, 40);
   textSize(TEXTSIZE_BIG);
-  text("" + wordLength, 60, 60, 60, 40);
-  text(outputText, 35, 190, width - 70, height-200);
+  text(outputText, 35, 160, width - 70, height-140);
   textSize(TEXTSIZE_SMALL);
   text(filteredWords.length + " palabra" + (filteredWords.length!=1?"s":""), 25, height-40, width - 40, height);
 }
@@ -172,31 +172,39 @@ void updateWords() {
 class SimpleButton extends ActiveElement {
 
   boolean on, active;
-  String ID = "";
+  int type;
+  String label = "";
 
-  SimpleButton (float x, float y, float w, float h, String _ID, boolean _active) {
+  SimpleButton (float x, float y, float w, float h, String _label, boolean _active, int _type) {
     super(x, y, w, h);
-    ID = _ID;
+    label = _label;
     active = _active;
+    type = _type;
   }
 
   void mousePressed () {
+
     on = true;
-    if (ID == "gen") {
-      updateWords();
-    } else if (ID == "inc") {
-      if (wordLength<20) {
-        wordLength++;
-        updateWords();
-      }
-    } else if (ID == "dec") {
+
+    if (type == 1 && label == "-") {
       if (wordLength>0) {
         wordLength--;
         updateWords();
       }
-    } else {
+    } else if (type == 1 && label == "+") {
+      if (wordLength<23) {
+        wordLength++;
+        updateWords();
+      }
+    } else if (type == 2) {
+      updateWords();
+    } else if (type==3) {
       active=!active;
-      a.setCanWriteLetter(ID, active);
+      a.setCanWriteLetter(label, active);
+      updateWords();
+    } else if (type==4 && a.getCanWriteLetter(label)) {
+      active=!active;
+      a.setShouldPracticeLetter(label, active);
       updateWords();
     }
   }
@@ -221,25 +229,32 @@ class SimpleButton extends ActiveElement {
       fill(#d35400);
     }
 
-    rect(x, y, width, height);
+    if (type!=4 || (type==4 && a.getCanWriteLetter(label))) {
+      rect(x, y, width, height);
+    }
 
     fill(#2c3e50);
 
-    if (ID == "gen") {
+    if (type == 1) {
+      textSize(TEXTSIZE_BIG);
+      text(label, x, y, width, height);
+    } else if (type == 2) {
       textSize(TEXTSIZE_MEDIUM);
-      text("Actualizar lista", x, y+6, width, height);
-    } else if (ID == "inc") {
-      textSize(TEXTSIZE_BIG);
-      text("+", x, y, width, height);
-    } else if (ID == "dec") {
-      textSize(TEXTSIZE_BIG);
-      text("-", x, y, width, height);
-    } else {
+      text(label, x, y+6, width, height);
+    } else if (type == 3) {
       textSize(TEXTSIZE_SMALL);
       if (!active) {
         fill(#ecf0f1);
       }
-      text(ID, x, y, width, height);
+      text(label, x, y, width, height);
+    } else if (type == 4) {
+      textSize(TEXTSIZE_SMALL);
+      if (!active) {
+        fill(#ecf0f1);
+      }
+      if (a.getCanWriteLetter(label)) {
+        text(label, x, y, width, height);
+      }
     }
   }
 }
