@@ -201,6 +201,7 @@ class SimpleButton extends ActiveElement {
     } else if (type==3) {
       active=!active;
       a.setCanWriteLetter(label, active);
+      a.setShouldPracticeLetter(label, false);
       updateWords();
     } else if (type==4 && a.getCanWriteLetter(label)) {
       active=!active;
