@@ -60,15 +60,17 @@ class Alphabet {
     shouldPracticeExpanded = "";
     for (int f=0; f<s.length(); f++) {
       Letter l = alphabet.get(s.substring(f, f+1));
-      l.setPractice(true);
-      shouldPracticeExpanded += s.substring(f, f+1) + l.getAlternates();
+      if (l.canWrite()) {
+        l.setPractice(true);
+        shouldPracticeExpanded += s.substring(f, f+1) + l.getAlternates();
+      }
     }
   }
 
   String getShouldPractice() {
     return shouldPracticeExpanded;
   }
-  
+
   void setShouldPracticeLetter(String l, boolean w) {
     alphabet.get(l).setPractice(w);
     shouldPracticeExpanded = "";
@@ -79,7 +81,7 @@ class Alphabet {
       }
     }
   }
-    
+
   boolean getShouldPracticeLetter(String l) {
     return alphabet.get(l).shouldPractice();
   }  
